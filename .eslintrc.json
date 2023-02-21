@@ -30,7 +30,11 @@
                     {
                         "alias":{
                             "@routes":"./src/routes",
-                            "@controllers":"./src/controllers"
+                            "@controllers":"./src/controllers",
+                            "@models":"./src/models",
+                            "@database":"./src/database",
+                            "@middlewares":"./src/middlewares",
+                            "@helpers":"./src/helpers"
                         }
                     }
                 ]

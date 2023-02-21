@@ -1,40 +1,56 @@
-import { Request, Response } from "express"
+import { Request, Response } from 'express';
 
-export const usuariosGet = (req:Request, resp:Response) => {
-    
-    resp.json({
-        msg: 'get API - controlador'
-    })
-}
+import Usuario from '@models/usuario.models';
+import { encriptarPassword } from '@helpers/db-validators';
 
-export const usuariosPost = (req:Request, resp:Response)=>{
+export const usuariosGet = async (req: Request, resp: Response) => {
+  const { limite = 5, desde = 0 } = req.query;
+  const usuarios = await Usuario.find().skip(+desde).limit(+limite);
 
-    const { nombre, edad } = req.body
+  resp.json({
+    usuarios
+  });
+};
 
-    resp.json({
-        msg: 'post API - controlador',
-        nombre, 
-        edad
-    })
-}
+export const usuariosPost = async (req: Request, resp: Response) => {
+  const { nombre, correo, password, rol } = req.body;
+  const usuario = new Usuario({ nombre, correo, password, rol });
 
-export const usuariosPut = (req:Request, resp:Response)=>{
-    const { id } = req.params
+  //* ENCRIPTAR CONTRASEÑA
+  usuario.password = encriptarPassword(password);
 
-    resp.json({
-        msg: 'put API - controlador',
-        id
-    })
-}
+  //* GUARDAR EN DB
+  await usuario.save();
 
-export const usuariosPatch = (req:Request, resp:Response)=>{
-    resp.json({
-        msg: 'patch API - controlador'
-    })
-}
+  resp.json({
+    usuario
+  });
+};
 
-export const usuariosDelete = (req:Request, resp:Response)=>{
-    resp.json({
-        msg: 'delete API - controlador'
-    })
-}
+export const usuariosPut = async (req: Request, resp: Response) => {
+  const { id } = req.params;
+  const { password, google, correo, ...resto } = req.body;
+
+  //TODO: VALIDAR CONTRA BD
+  if (password) {
+    resto.password = encriptarPassword(password);
+  }
+
+  const usuario = await Usuario.findByIdAndUpdate(id, resto);
+
+  resp.json({
+    usuario
+  });
+};
+
+export const usuariosPatch = (req: Request, resp: Response) => {
+  resp.json({
+    msg: 'patch API - controlador'
+  });
+};
+
+export const usuariosDelete = (req: Request, resp: Response) => {
+  resp.json({
+    msg: 'delete API - controlador'
+  });
+};
