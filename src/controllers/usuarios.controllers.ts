@@ -5,9 +5,14 @@ import { encriptarPassword } from '@helpers/db-validators';
 
 export const usuariosGet = async (req: Request, resp: Response) => {
   const { limite = 5, desde = 0 } = req.query;
-  const usuarios = await Usuario.find().skip(+desde).limit(+limite);
+
+  const [total, usuarios] = await Promise.all([
+    Usuario.countDocuments({ estado: true }),
+    Usuario.find({ estado: true }).skip(+desde).limit(+limite)
+  ]);
 
   resp.json({
+    total,
     usuarios
   });
 };
@@ -49,8 +54,16 @@ export const usuariosPatch = (req: Request, resp: Response) => {
   });
 };
 
-export const usuariosDelete = (req: Request, resp: Response) => {
+export const usuariosDelete = async (req: Request, resp: Response) => {
+  const { id } = req.params;
+
+  //? Borrado fisico //
+  // const usuario = await Usuario.findByIdAndDelete(id)
+
+  //? Borrado logico //
+  const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
+
   resp.json({
-    msg: 'delete API - controlador'
+    usuario
   });
 };

@@ -34,7 +34,8 @@
                             "@models":"./src/models",
                             "@database":"./src/database",
                             "@middlewares":"./src/middlewares",
-                            "@helpers":"./src/helpers"
+                            "@helpers":"./src/helpers",
+                            "@interfaces":"./src/interfaces"
                         }
                     }
                 ]

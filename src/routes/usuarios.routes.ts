@@ -14,10 +14,11 @@ import {
   existeUsuarioPorId,
   validateEmail
 } from '@helpers/db-validators';
+import { validarPaginado } from '@middlewares/query-validators';
 
 const router = Router();
 
-router.get('/', usuariosGet);
+router.get('/', [validarPaginado, validarCampos], usuariosGet);
 
 router.post(
   '/',
@@ -48,6 +49,14 @@ router.put(
 
 router.patch('/', usuariosPatch);
 
-router.delete('/', usuariosDelete);
+router.delete(
+  '/:id',
+  [
+    check('id', 'No es un ID valido').isMongoId(),
+    check('id').custom(existeUsuarioPorId),
+    validarCampos
+  ],
+  usuariosDelete
+);
 
 export default router;
