@@ -1,0 +1,51 @@
+import { Request, Response } from "express";
+import bcryptjs from 'bcryptjs'
+
+import Usuario from '@models/usuario.models'
+import { IErrors } from "@interfaces/errors.interface";
+
+export const login = async(req:Request, resp:Response)=>{
+
+    const { correo, password } = req.body
+
+    const error:IErrors = {
+        msg: "Usuario / Password no son correctos",
+        param: "Usuario / Password",
+        location: "body"
+    }
+
+    try {
+        //? VERIRIFCAR SI EL CORREO EXISTE
+        const usuario = await Usuario.findOne({correo})
+        if (!usuario) {
+            
+            return resp.status(400).json({error})
+        }
+
+        //? SI EL USUARIO ESTA ACTIVO
+        if (!usuario.estado) {
+
+            return resp.status(400).json({error})
+        }
+
+        //? VERIFICAR LA CONTRASEÑA
+        const validPassword = bcryptjs.compareSync(password, usuario.password)
+        if (!validPassword) {
+            return resp.status(400).json({error})
+        }
+
+        //? GENERAR EL JWT
+
+        resp.json({
+            msg: 'Login ok'
+        })
+
+    } catch (error) {
+        console.log(error)
+        return resp.status(500).json({
+            msg: 'Hable con el administrador'
+        })
+    }
+
+   
+}
