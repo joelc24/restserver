@@ -36,7 +36,7 @@ export const usuariosPut = async (req: Request, resp: Response) => {
   const { id } = req.params;
   const { password, google, correo, ...resto } = req.body;
 
-  //TODO: VALIDAR CONTRA BD
+  
   if (password) {
     resto.password = encriptarPassword(password);
   }
