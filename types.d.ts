@@ -1,6 +1,4 @@
-import { Document } from "mongoose";
-
-export interface IUsuario extends Document{
+interface Usuario {
     nombre: string,
     correo: string,
     password: string,
@@ -9,3 +7,10 @@ export interface IUsuario extends Document{
     estado?: boolean,
     google?: boolean 
 }
+
+declare namespace Express {
+    interface Request {
+        uid: string,
+        usuario: Usuario
+    }
+} 

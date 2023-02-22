@@ -3,6 +3,7 @@ import bcryptjs from 'bcryptjs'
 
 import Usuario from '@models/usuario.models'
 import { IErrors } from "@interfaces/errors.interface";
+import { generarJWT } from "@helpers/generar-jwt";
 
 export const login = async(req:Request, resp:Response)=>{
 
@@ -35,9 +36,11 @@ export const login = async(req:Request, resp:Response)=>{
         }
 
         //? GENERAR EL JWT
+        const token = await generarJWT( usuario.id )
 
         resp.json({
-            msg: 'Login ok'
+            usuario,
+            token
         })
 
     } catch (error) {

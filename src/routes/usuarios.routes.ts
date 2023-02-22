@@ -14,7 +14,10 @@ import {
   existeUsuarioPorId,
   validateEmail
 } from '@helpers/db-validators';
+
 import { validarPaginado } from '@middlewares/query-validators';
+import { validarJWT } from '@middlewares/validar-jwt';
+import { esAdminRole, tieneRole } from '@middlewares/validar-roles';
 
 const router = Router();
 
@@ -52,6 +55,9 @@ router.patch('/', usuariosPatch);
 router.delete(
   '/:id',
   [
+    validarJWT,
+    // esAdminRole,
+    tieneRole('ADMIN_ROLE','VENTAS_ROLE'),
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom(existeUsuarioPorId),
     validarCampos
