@@ -22,6 +22,7 @@ module.exports = {
                     '@routes': './src/routes',
                     '@utils': './src/utils',
                     '@middlewares': './src/middlewares',
+                    '@helpers': './src/helpers'
                 }
             }
         ]
