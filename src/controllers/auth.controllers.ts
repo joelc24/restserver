@@ -70,6 +70,7 @@ export const googleSignIn = async(req:Request, resp:Response)=>{
                 correo,
                 password: '123456',
                 img,
+                rol: 'USER_ROLE',
                 google: true
             }
 

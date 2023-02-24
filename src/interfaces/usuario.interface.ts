@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
 
-export interface IUsuario extends Document{
+export interface IUsuarioModels extends Document{
     nombre: string,
     correo: string,
     password: string,

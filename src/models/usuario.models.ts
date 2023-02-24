@@ -1,7 +1,7 @@
-import { IUsuario } from '@interfaces/usuario.interface';
+import { IUsuarioModels } from '@interfaces/usuario.interface';
 import { Schema, model } from 'mongoose';
 
-const UsuarioSchema = new Schema<IUsuario>({
+const UsuarioSchema = new Schema<IUsuarioModels>({
   nombre: {
     type: String,
     required: [true, 'El nombre es obligatorio']
@@ -38,4 +38,4 @@ UsuarioSchema.methods.toJSON = function () {
     return { uid:_id, ...usuario}
 }
 
-export default model<IUsuario>('Usuario', UsuarioSchema);
+export default model<IUsuarioModels>('Usuario', UsuarioSchema);
