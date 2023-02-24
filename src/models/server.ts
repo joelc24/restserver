@@ -3,14 +3,16 @@ import cors from 'cors';
 
 import dbConnection from '@database/config.db';
 import userRoutes from '@routes/usuarios.routes';
-import authRoutes from '@routes/auth.routes'
+import authRoutes from '@routes/auth.routes';
+import categoriasRoutes from '@routes/categorias.routes';
 
 class Server {
   private app: Application;
   private port: string;
   private apiPaths = {
     user: '/api/usuarios',
-    auth: '/api/auth'
+    auth: '/api/auth',
+    categorias: '/api/categorias'
   };
   constructor() {
     this.app = express();
@@ -34,7 +36,8 @@ class Server {
 
   routes() {
     this.app.use(this.apiPaths.user, userRoutes);
-    this.app.use(this.apiPaths.auth, authRoutes)
+    this.app.use(this.apiPaths.auth, authRoutes);
+    this.app.use(this.apiPaths.categorias, categoriasRoutes);
   }
 
   listen() {
