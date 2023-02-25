@@ -43,6 +43,7 @@ export const validarJWT = async(req:Request,resp:Response,next:NextFunction)=>{
         }
 
         req.usuario = usuario
+        console.log(req.usuario._id)
 
         next()
     } catch (err) {
@@ -55,5 +56,5 @@ export const validarJWT = async(req:Request,resp:Response,next:NextFunction)=>{
         resp.status(401).json({ error })
     }
 
-    next()
+   
 }
