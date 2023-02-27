@@ -1,3 +1,4 @@
+import Categoria from '@models/categoria.models';
 import Role from '@models/role.models';
 import Usuario from '@models/usuario.models';
 import bcryptjs from 'bcryptjs';
@@ -29,3 +30,15 @@ export const encriptarPassword = (password: string): string => {
   const passwordEncriptado = bcryptjs.hashSync(password, salt);
   return passwordEncriptado;
 };
+
+
+export const existeCategoria = async (id:string) => {
+  
+  const existCategoria = await Categoria.findById(id)
+
+  if (!existCategoria) {
+    throw new Error(`La categoria con id: ${id}, no existe`);
+    
+  }
+
+}

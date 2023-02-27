@@ -3,6 +3,42 @@ import Categoria from "@models/categoria.models";
 import { IErrors } from "@interfaces/errors.interface";
 
 
+export const obtenerCategorias = async(req:Request, resp:Response) => {
+    
+    const { desde = 0, limite = 5 } = req.query
+    
+    const [total, categorias] = await Promise.all([
+        Categoria.countDocuments(),
+        Categoria.find({estado: true}).skip(+desde).limit(+limite).populate({ path: 'usuario', select: 'nombre' })
+    ])
+
+    resp.json({
+        total,
+        categorias
+    })
+
+}
+
+
+export const obtenerCategoria = async (req:Request, resp:Response) => {
+    const { id } = req.params
+
+    const categoria = await Categoria.findById(id).populate('usuario','nombre')
+
+    if (!categoria) {
+        const error: IErrors = {
+            msg: `La categoria con id: ${id}, no existe`,
+            param: "id",
+            location: "ruta"
+        }
+        return resp.status(400).json({ error })
+    }
+
+    return resp.json({
+        categoria
+    })
+}
+
 export const crearCategoria = async(req:Request, resp:Response)=>{
 
     const nombre = req.body.nombre.toUpperCase()
@@ -33,4 +69,49 @@ export const crearCategoria = async(req:Request, resp:Response)=>{
     resp.json({
         msg: 'POST'
     })
+}
+
+export const actualizarCategoria = async (req:Request, resp:Response) => {
+    
+    const { id } = req.params
+    const { nombre } = req.body
+
+    try {
+        
+        const categoria = Categoria.findByIdAndUpdate(id, { nombre })
+
+        return resp.json({ categoria })
+
+    } catch (error) {
+        console.log(error)
+        return resp.status(500).json({
+            error:{
+                msg: 'Hable con el administrador'
+            }
+        })
+    }
+    
+
+}
+
+export const borrarCategoria = async (req:Request, resp:Response) => {
+    
+    const { id } = req.params
+
+    try {
+        
+        const categoria = Categoria.findByIdAndUpdate(id, { estado: false })
+
+        return resp.json({ categoria })
+
+    } catch (error) {
+        console.log(error)
+        return resp.status(500).json({
+            error:{
+                msg: 'Hable con el administrador'
+            }
+        })
+    }
+
+
 }

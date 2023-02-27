@@ -3,23 +3,32 @@ import { check } from 'express-validator';
 
 import { validarCampos } from '@middlewares/validar-campos';
 import { validarJWT } from '@middlewares/validar-jwt';
-import { crearCategoria } from '@controllers/categorias.controllers';
+import {
+  actualizarCategoria,
+  borrarCategoria,
+  crearCategoria,
+  obtenerCategoria,
+  obtenerCategorias
+} from '@controllers/categorias.controllers';
+import { validarPaginado } from '@middlewares/query-validators';
+import { existeCategoria } from '@helpers/db-validators';
 
 const router = Router();
 
 //? obtener todas las categorias - publico
-router.get('/', (req: Request, resp: Response) => {
-  resp.json({
-    msg: 'Todo Ok'
-  });
-});
+router.get('/', validarPaginado, obtenerCategorias);
 
 //? Obtener una categoria por id - publico
-router.get('/:id', (req: Request, resp: Response) => {
-  resp.json({
-    msg: 'getId'
-  });
-});
+router.get(
+  '/:id',
+  [
+    check('id', 'El id es requerido').notEmpty(),
+    check('id', 'No es un id de mongo valido').isMongoId(),
+    check('id').custom(existeCategoria),
+    validarCampos
+  ],
+  obtenerCategoria
+);
 
 //? Crear categoria - privado - cualquier persona con un token valido
 router.post(
@@ -33,17 +42,30 @@ router.post(
 );
 
 //? Actualizar - privado - cualquiera con token valido
-router.put('/:id', (req: Request, resp: Response) => {
-  resp.json({
-    msg: 'put'
-  });
-});
+router.put(
+  '/:id',
+  [
+    validarJWT,
+    check('id', 'El id es requerido').not().isEmpty(),
+    check('id', 'No es un id valido de mongo').isMongoId(),
+    check('id').custom(existeCategoria),
+    check('nombre','El nombre es requerido').notEmpty(),
+    validarCampos
+  ],
+  actualizarCategoria
+);
 
 //? Borrar una categoria - Admin
-router.delete('/:id', (req: Request, resp: Response) => {
-  resp.json({
-    msg: 'dalete'
-  });
-});
+router.delete(
+  '/:id',
+  [
+    validarJWT,
+    check('id', 'El id es requerido').notEmpty(),
+    check('id', 'No es un id valido de mongo').isMongoId(),
+    check('id').custom(existeCategoria),
+    validarCampos
+  ],
+  borrarCategoria
+);
 
 export default router;
