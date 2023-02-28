@@ -8,7 +8,7 @@ export const obtenerCategorias = async(req:Request, resp:Response) => {
     const { desde = 0, limite = 5 } = req.query
     
     const [total, categorias] = await Promise.all([
-        Categoria.countDocuments(),
+        Categoria.countDocuments({estado: true}),
         Categoria.find({estado: true}).skip(+desde).limit(+limite).populate({ path: 'usuario', select: 'nombre' })
     ])
 
@@ -74,11 +74,14 @@ export const crearCategoria = async(req:Request, resp:Response)=>{
 export const actualizarCategoria = async (req:Request, resp:Response) => {
     
     const { id } = req.params
-    const { nombre } = req.body
+    const { estado, usuario, ...data } = req.body
+
+    data.nombre = data.nombre.toUpperCase()
+    data.usuario = req.usuario._id
 
     try {
         
-        const categoria = Categoria.findByIdAndUpdate(id, { nombre })
+        const categoria = await Categoria.findByIdAndUpdate(id, { data }, { new: true })
 
         return resp.json({ categoria })
 

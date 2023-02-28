@@ -12,6 +12,7 @@ import {
 } from '@controllers/categorias.controllers';
 import { validarPaginado } from '@middlewares/query-validators';
 import { existeCategoria } from '@helpers/db-validators';
+import { esAdminRole } from '@middlewares/validar-roles';
 
 const router = Router();
 
@@ -60,6 +61,7 @@ router.delete(
   '/:id',
   [
     validarJWT,
+    esAdminRole,
     check('id', 'El id es requerido').notEmpty(),
     check('id', 'No es un id valido de mongo').isMongoId(),
     check('id').custom(existeCategoria),

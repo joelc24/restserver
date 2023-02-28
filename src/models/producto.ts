@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const CategoriaSchema = new Schema({
+const ProductoSchema = new Schema({
     nombre:{
         type: String,
         required: [true, 'El nombre es obligatorio'],
@@ -15,12 +15,26 @@ const CategoriaSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true
+    },
+    precio: {
+        type: Number,
+        default: 0
+    },
+    categoria: {
+        type: Schema.Types.ObjectId,
+        ref: 'Categoria',
+        required: true
+    },
+    descripcion: String,
+    disponible: {
+        type: Boolean,
+        default: true
     }
 })
 
-CategoriaSchema.methods.toJSON = function() {
+ProductoSchema.methods.toJSON = function() {
     const { __v, estado, ...data } = this.toOBject()
     return data
 }
 
-export default model('Categoria', CategoriaSchema)
+export default model('Producto', ProductoSchema)

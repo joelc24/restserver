@@ -11,7 +11,6 @@ interface Usuario {
 
 declare namespace Express {
     interface Request {
-        uid: string,
         usuario: Usuario
     }
 } 

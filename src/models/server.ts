@@ -5,6 +5,7 @@ import dbConnection from '@database/config.db';
 import userRoutes from '@routes/usuarios.routes';
 import authRoutes from '@routes/auth.routes';
 import categoriasRoutes from '@routes/categorias.routes';
+import prodcutosRoutes from '@routes/producto.routes';
 
 class Server {
   private app: Application;
@@ -12,7 +13,8 @@ class Server {
   private apiPaths = {
     user: '/api/usuarios',
     auth: '/api/auth',
-    categorias: '/api/categorias'
+    categorias: '/api/categorias',
+    productos: '/api/productos'
   };
   constructor() {
     this.app = express();
@@ -38,6 +40,7 @@ class Server {
     this.app.use(this.apiPaths.user, userRoutes);
     this.app.use(this.apiPaths.auth, authRoutes);
     this.app.use(this.apiPaths.categorias, categoriasRoutes);
+    this.app.use(this.apiPaths.productos, prodcutosRoutes)
   }
 
   listen() {
