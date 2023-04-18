@@ -54,7 +54,7 @@ export const crearCategoria = async(req:Request, resp:Response)=>{
         return resp.status(400).json({ error })
     }
 
-    console.log(req.usuario)
+    
     // Generar la data a guardar
     const data = {
         nombre,
@@ -66,9 +66,6 @@ export const crearCategoria = async(req:Request, resp:Response)=>{
 
     resp.status(201).json(categoria)
 
-    resp.json({
-        msg: 'POST'
-    })
 }
 
 export const actualizarCategoria = async (req:Request, resp:Response) => {

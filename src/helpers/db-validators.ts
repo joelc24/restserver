@@ -2,6 +2,7 @@ import Categoria from '@models/categoria.models';
 import Role from '@models/role.models';
 import Usuario from '@models/usuario.models';
 import bcryptjs from 'bcryptjs';
+import Producto from '@models/producto';
 
 export const esRoleValido = async (rol: string = '') => {
   const existRol = await Role.findOne({ rol });
@@ -41,4 +42,13 @@ export const existeCategoria = async (id:string) => {
     
   }
 
+}
+
+export const existeProducto = async(id:string) =>{
+  const existProducto = await Producto.findById(id)
+
+  if (!existProducto) {
+    throw new Error(`El producto con id: ${id}, no existe`);
+    
+  }
 }

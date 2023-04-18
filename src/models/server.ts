@@ -6,6 +6,7 @@ import userRoutes from '@routes/usuarios.routes';
 import authRoutes from '@routes/auth.routes';
 import categoriasRoutes from '@routes/categorias.routes';
 import prodcutosRoutes from '@routes/producto.routes';
+import buscarRoutes from '@routes/buscar.routes'
 
 class Server {
   private app: Application;
@@ -14,7 +15,8 @@ class Server {
     user: '/api/usuarios',
     auth: '/api/auth',
     categorias: '/api/categorias',
-    productos: '/api/productos'
+    productos: '/api/productos',
+    buscar: '/api/buscar'
   };
   constructor() {
     this.app = express();
@@ -41,6 +43,7 @@ class Server {
     this.app.use(this.apiPaths.auth, authRoutes);
     this.app.use(this.apiPaths.categorias, categoriasRoutes);
     this.app.use(this.apiPaths.productos, prodcutosRoutes)
+    this.app.use(this.apiPaths.buscar, buscarRoutes)
   }
 
   listen() {
